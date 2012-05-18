@@ -1,0 +1,41 @@
+Tavoitteet:
+
+-Ymmärtää Haskell, miten haskell toimii?
+-Tuottaa tehokasta koodia
+
+Esimerkki:
+
+length(map not (True:False:[])
+
+eka uloin taso, eli length. Katsotaan lengthin määritelmä:
+
+length [] = 0
+length (x:xs) = 1 + length xs
+
+Jotta tiedetään kumpaa lengthin yhtälöä käytetään, pitää tutkia seuraavaa tasoa, eli map nottia.
+
+map tietää että se saa listan jossa on jotain tavaraa, koska listan alussa on True:False. Käytetään siis mapin toista yhtälöä. Saamme siis:
+
+length(not True: map not (False:[]))
+
+Tässä on yksi askel evaluaatiota.
+
+Nyt length tietää että sillä on lista, joka ei ole tyhjä (True:) joten saamme:
+
+1 + length(map not (False:[]))
+
+Nyt ylimpänä funktiona (päätasolla) on operaatio +
+
+Sen vasen argumentti on luku, toisen pitää olla myös luku. Siispä pitää laskea luku oikealle puolelle. Suoritetaan yksi askel lisää mappia. (Samalla tavalla kuin yllä)
+
+=> 1 + length (not False: map not [])
+=> 1 + (1+ length(map not []))
+=> 1 + 1 + length [] => 1 + 1 + 0
+
+Sama esimerkki myös prujussa!
+
+Tämä kulutti siis kahdeksan askelta evaluointia.
+
+Nottia ei koskaan evaluoitu!
+
+Evaluoidaan asioita vain niin pitkälle että ne voidaan hahmonsovittaa. Nimi: WHNF: Weak Head Normal Form.
