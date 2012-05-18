@@ -39,3 +39,9 @@ Tämä kulutti siis kahdeksan askelta evaluointia.
 Nottia ei koskaan evaluoitu!
 
 Evaluoidaan asioita vain niin pitkälle että ne voidaan hahmonsovittaa. Nimi: WHNF: Weak Head Normal Form.
+
+Graafireduktio
+
+1. Uloin ensin
+2. Hahmonsovitus aiheuttaa evaluointia
+3. Nimi evaluoidaan korkeintaan kerran
