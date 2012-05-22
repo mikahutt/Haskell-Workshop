@@ -32,7 +32,19 @@ not False = True
 
 -- a) not (const (7+8+9) (1+1==2))
 
--- d) length (takeWhile (<9) (map (^2) [0..]))
+=> not (const (7+8+9) (2 == 2))
+=> not (const (7+8+9) True)
+=> not (True)
+=> False
+
+-- b) length (takeWhile (<9) (map (^2) [0..]))
+
+=> length (takeWhile (<9) (0: map (^2) [1..]))
+=> 1 + length (takeWhile (<9) (1:map (^2) [1..]))
+=> 1 + ( 1+ (length (takeWhile (<9) (4:map (^2) [2..]))))
+=> 1 + (1+ (1+ length ((takeWhile (<9) (9:map (^2) [2..]))))
+=> 1 + 1 + 1 + 0
+=> 3
 
 -- c) not (seq (7+8+9) (1+1==2))
 
