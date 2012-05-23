@@ -29,27 +29,43 @@ not False = True
 [] ++ ys = ys
 (x:xs) ++ ys = x:(xs++ys)
 -}
-
+{-
 -- a) not (const (7+8+9) (1+1==2))
 
 => not (const (7+8+9) (2 == 2))
 => not (const (7+8+9) True)
-=> not (True)
+=> not True
 => False
 
 -- b) length (takeWhile (<9) (map (^2) [0..]))
-
+=> length (takeWhile (<9) (map (^2) 0: [1..]))
+=> length (takeWhile (<9) (0^2: map (^2) [1..]))
 => length (takeWhile (<9) (0: map (^2) [1..]))
-=> 1 + length (takeWhile (<9) (1:map (^2) [1..]))
-=> 1 + ( 1+ (length (takeWhile (<9) (4:map (^2) [2..]))))
-=> 1 + (1+ (1+ length ((takeWhile (<9) (9:map (^2) [2..]))))
-=> 1 + 1 + 1 + 0
+=> length (0: takeWhile (<9) (map (^2) [1..]))
+=> 1 + length (takeWhile (<9) (map (^2) [1..]))
+=> 1 + length (takeWhile (<9) (map (^2) 1: [2..]))
+=> 1 + length (takeWhile (<9) (1^2: map (^2) [2..]))
+=> 1 + length (takeWhile (<9) (1: map (^2) [2..]))
+=> 1 + length (1: takeWhile (<9) (map (^2) [2..]))
+=> 1 + (1 + length (takeWhile (<9) (map (^2) [2..])))
+=> 1 + (1 + length (takeWhile (<9) (map (^2) 2: [3..])))
+=> 1 + (1 + length (takeWhile (<9) (2^2: map (^2) [3..])))
+=> 1 + (1 + length (takeWhile (<9) (4: map (^2) [3..])))
+=> 1 + (1 + length (4: takeWhile (<9) (map (^2) [3..])))
+=> 1 + (1 + (1 + length (takeWhile (<9) (map (^2) [3..]))))
+=> 1 + (1 + (1 + length (takeWhile (<9) (map (^2) 3: [4..]))))
+=> 1 + (1 + (1 + length (takeWhile (<9) (3^2: map (^2) [4..]))))
+=> 1 + (1 + (1 + length (takeWhile (<9) (9: map (^2) [4..]))))
+=> 1 + (1 + (1 + length []))
+=> 1 + (1 + (1 + 0))
+=> 1 + (1 + 1)
+=> 1 + 2
 => 3
 
 -- c) not (seq (7+8+9) (1+1==2))
 
 -- d) let x = [1,2,3]; y = x++y in take 5 y
-
+-}
 -- Tehtävä 2: Piirrä seuraavia lausekkeita vastaavat graafit
 
 -- a) (1+1)*(1+1)
