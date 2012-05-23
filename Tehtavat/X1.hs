@@ -63,20 +63,42 @@ not False = True
 => 3
 
 -- c) not (seq (7+8+9) (1+1==2))
+=> not (seq 24 (1+1==2))
+=> not (1+1==2)
+=> not (2==2)
+=> not True
+=> False
 
 -- d) let x = [1,2,3]; y = x++y in take 5 y
+=> take 5 x++y
+=> take 5 [1,2,3]++y
+=> take 5 
+
 -}
 -- Tehtävä 2: Piirrä seuraavia lausekkeita vastaavat graafit
-
+{-
 -- a) (1+1)*(1+1)
+
+     *
+    / \
+   +   +
+  /\   /\
+ 1  1 1  1
+  
+  
 -- b) let x = 1+1
 --        y = x+x
 --    in y - (x+x)
+
+              
+
+
+
 -- c) let num = 7
 --        nums = num:nums
 --        ls = take num nums
 --    in (num+1):ls
-
+-}
 -- Tehtävä 3: Toteuta funktio reverse' joka kääntää listan. Tee
 -- funktiostasi sellainen, että paluuarvon täysin evaluoiminen vaatii
 -- lineaarisen ajan. Perustele ajankäyttö myös!
