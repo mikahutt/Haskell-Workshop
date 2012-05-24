@@ -38,6 +38,7 @@ not False = True
 => False
 
 -- b) length (takeWhile (<9) (map (^2) [0..]))
+
 => length (takeWhile (<9) (map (^2) 0: [1..]))
 => length (takeWhile (<9) (0^2: map (^2) [1..]))
 => length (takeWhile (<9) (0: map (^2) [1..]))
