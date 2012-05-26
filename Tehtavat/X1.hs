@@ -91,21 +91,40 @@ not False = True
 --        y = x+x
 --    in y - (x+x)
 
-              
-
-
+              -
+             / \
+            +   +
+            \\ //
+              +
+             / \
+            1   1
 
 -- c) let num = 7
 --        nums = num:nums
 --        ls = take num nums
 --    in (num+1):ls
+
+                 :
+                / \
+               +   take
+              / \   /  \
+            _7   1 /  __:_
+           | |_____| |  |_|
+           |_________|
+             
 -}
 -- Tehtävä 3: Toteuta funktio reverse' joka kääntää listan. Tee
 -- funktiostasi sellainen, että paluuarvon täysin evaluoiminen vaatii
 -- lineaarisen ajan. Perustele ajankäyttö myös!
 
 reverse' :: [a] -> [a]
-reverse' xs = undefined
+reverse' xs = apureverse [] xs
+            where apureverse ys [] = ys
+                  apureverse ys (x:xs) = apureverse (x:ys) xs
+                  
+-- Tämä on lineaarinen, sillä :-operaatio lisää alkion listan alkuun. Se
+-- on vakioaikainen ja kasaamme käännettyä listaa kokoajan sen avulla. 
+-- Tässä tulee myös n kappaletta hahmonsovituksia n-pituiselle listalle.
 
 -- Tehtävä 4: Kirjoita vakiotilassa toimiva funktio, joka hakee
 -- merkkijonosta juuri ennen ensimmäistä välilyöntiä ennen esiintyvän
@@ -118,16 +137,45 @@ reverse' xs = undefined
 --   findIt "herpaderp hyi hai!" ==> 'e'
 
 findIt :: String -> Char
-findIt s = undefined
+findIt s = apu s 'a'
+  where vokaali x = elem x ['a','e','i','o','u','y','A','E','I','O','U','Y']
+        apu (' ':xs) vok = vok
+        apu (x:xs) vok
+           | vokaali x = apu xs x
+           | otherwise = apu xs vok
+        
+{-tehtävänannossa ei sanottu mitään syötteestä, jossa haluttua tilannetta ei ole.
+
+perustelu vakiotilalle: välivaiheiden koot rajoitettuja, rekursion kutsut
+eivät kasvata parametrien pituutta. Syötettä on pakko raahata mukana. 
+Välivaiheiden koot ilmenevät seuraavasta:
+
+findIt "eb c"
+==> apu "eb c" 'a'
+==> apu "b c" 'e'
+==> apu " c" 'e'
+==> 'e'
+         
+-}
 
 -- Tehtävä 5: Toteuta vakiotilassa toimiva funktio count, joka laskee
 -- montako predikaatin täyttävää alkiota listasta löytyy. Perustele
 -- miksi toteutuksesi on vakiotilainen.
 --
--- Huom! Toteutuksen tulee olla vakiotilainen ilman optimointeja.
+-- Huom! Toteutuksen tulee olla vakiotilainen ilman optimointeja.(taisiis -O0:lla käännettynä)
 
-count :: (a -> Bool) -> [a] -> [a]
-count p xs = undefined
+count :: (a -> Bool) -> [a] -> Int
+count p xs = help p xs 0
+  where help :: (a -> Bool) -> [a] -> Int -> Int
+        help p [] n = n
+        help p (x:xs) n
+           | p x = seq n (help p xs (n+1))
+           | otherwise = help p xs n
+
+-- vakiotilainen koska seqin avulla lukumäärä evaluoidaan aina kun
+-- sitä kasvatetaan. Siksi ei pääse tulemaan tilannetta, jossa parametri n
+-- olisi tyyliin ((((((0+1)+1)+1)+1)+1)+1)+1, vaan se on tässä tilanteessa 6+1.
+
 
 -- Tehtävä 6: Seuraavassa fibonaccin lukuja laskevassa funktiossa on
 -- muistivuoto (koita vaikkapa laskea 600000. fibonaccin luku). Korjaa
@@ -139,7 +187,7 @@ count p xs = undefined
 fib :: Integer -> Integer
 fib n = go 0 1 n
   where go a b 0 = a
-        go a b n = go b (a+b) (n-1)
+        go a b n = seq (a+b) (go b (a+b) (n-1))
 
 {-
 main = do
@@ -233,4 +281,3 @@ main = do
   let n = read k 
   print $ analyze $ take n $ cycle "Hello world! "
 -}
-
