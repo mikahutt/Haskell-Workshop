@@ -203,9 +203,24 @@ main = do
 -- jotta näet että muistinkäyttö on tarpeeksi pieni.
 
 avg :: [Double] -> Double
-avg ds = undefined
+avg ds = avg' ds 0 0
+       where avg' [] _ 0     = 0
+             avg' [] n k     = n/k
+             avg' (d:ds) n k = seq (n+k+d) (avg' ds (n+d) (k+1))  
+
 
 {-
+profiloitaessa syötteellä 50 000:
+maximum residency: alle 150 000
+Total time: 0,06 s
+%GC time: 25 %
+
+ja syötteellä 500 000:
+maximum residency: noin 3 800 000
+Total time: 0,09 s
+%GC time: 33,3 %
+
+
 main = do
   [k] <- getArgs
   let n = read k
@@ -226,6 +241,31 @@ countZeros1 :: [Int] -> Int
 countZeros1 xs = go 0 xs
   where go k [] = k
         go k (x:xs) = go (if x == 0 then k+1 else k)  xs
+        
+{-
+countZeros0 [0,1,0]             countZeros1 [0,1,0]
+==> go 0 [0,1,0]                ==> go 0 [0,1,0]
+==> go 0 0:[1,0]                ==> go 0 0:[1,0]
+==> go (0+1) [1,0]              ==> go (if 0==0 then 0+1 else 0) [1,0]
+==> go (0+1) 1:[0]              ==> go (if True then 0+1 else 0) [1,0]
+==> go (0+1) [0]                ==> go (0+1) [1,0]
+==> go (0+1) 0:[]               ==> go (0+1) 1:[0]
+==> go ((0+1)+1) []             ==> go (if 1==0 then (0+1)+1 else 0+1) [0]
+==> (0+1)+1                     ==> go (if False then (0+1)+1 else 0+1) [0]
+==> 1+1                         ==> go (0+1) [0]
+==> 2                           ==> go (0+1) 0:[]
+                                ==> go (if 0==0 then (0+1)+1 else (0+1)) []
+                                ==> go (if True then (0+1)+1 else (0+1)) []
+                                ==> go ((0+1)+1) []
+                                ==> ((0+1)+1)
+                                ==> 1+1
+                                ==> 2
+                                
+Huomataan, että countZeros1:ssä if-ehdon evaluointiin menee enemmän aikaa, kuin
+countZeros0:ssa kun sama ehto testataan hahmonsovituksella. Siis countZeros0 on
+tehokkaampi hahmonsovituksen ansiosta.                                
+                                
+-}
         
 -- Tehtävä 9&10: Tuota aika-, ja muistiprofiilit seuraavasta ohjelmasta.
 -- Mikä on vialla? Korjaa ohjelma.
@@ -261,7 +301,7 @@ main = do
   print $ siz $ foldl ins Leaf dat
 -}        
         
--- Tehtävä 10: Tee funktio analyze, joka laskee merkkijonossa
+-- Tehtävä 11: Tee funktio analyze, joka laskee merkkijonossa
 -- esiintyvien välilyöntien määrän ja merkkijonon pituuden.
 --
 -- Toteuta funktiosi foldr':n avulla ja käytä ahkeraa tietotyyppiä
