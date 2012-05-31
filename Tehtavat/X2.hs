@@ -1,5 +1,8 @@
 module X2 where
 
+import Control.Parallel
+import System.Environment
+
 -- Tehtävä 1: Toteuta funktio parMax, joka laskee listan maksimin
 -- rinnakkaisesti. Funktiosi tarvitsee käyttää vain kahta ydintä
 -- tehokkaasti.
@@ -7,7 +10,11 @@ module X2 where
 -- Vihje: jaa lista kahtia
 
 parMax :: Ord a => [a] -> a
-parMax xs = undefined
+parMax xs = let
+                a = maximum $ take ((length xs) `div` 2) xs
+                b = maximum $ drop ((length xs) `div` 2) xs
+            in 
+                a `par` (b `pseq` (max a b))
 
 -- Tehtävä 2: Tehtävänäsi on laskea puussa olevien arvojen summa
 -- rinnakkaisesti. Alla on määritelty tyyppi Tree, joka esittää
@@ -25,7 +32,7 @@ data Tree = Leaf | Node Integer Tree Tree
 
 sumTree :: Tree -> Integer
 sumTree t = undefined
-
+{-
 -- Tehtävä 3: Määrittele seuraavat strategiat (käyttäen muita
 -- strategioita mikäli mahdollista...)
 
@@ -171,4 +178,4 @@ main = do
 
 -- Kurssisivulta löydät kasan testisyötteitä. Tiedostonimi sc_X_Y
 -- tarkoittaa että tiedostossa on X kasaa ja oikea vastaus on Y.
-
+-}
