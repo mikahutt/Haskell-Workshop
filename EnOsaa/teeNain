@@ -1,0 +1,4 @@
+ghc --make jepa.hs -threaded -fforce-recomp
+
+./jepa +RTS -N2 -s
+
